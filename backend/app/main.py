@@ -1,9 +1,19 @@
 from __future__ import annotations
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.config import PROJECT_NAME
 from app.seed import seed_if_empty
-from app.routers import dashboard, events, redeem, settings
+from app.routers import (
+    dashboard,
+    events,
+    policy,
+    reconciliation,
+    redeem,
+    returns,
+    settings,
+)
 
 seed_if_empty()
 
@@ -17,4 +27,7 @@ app.add_middleware(
 app.include_router(dashboard.router, prefix="/api")
 app.include_router(events.router, prefix="/api")
 app.include_router(redeem.router, prefix="/api")
+app.include_router(returns.router, prefix="/api")
+app.include_router(reconciliation.router, prefix="/api")
+app.include_router(policy.router, prefix="/api")
 app.include_router(settings.router, prefix="/api")

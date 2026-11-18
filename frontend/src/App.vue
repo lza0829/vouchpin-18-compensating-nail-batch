@@ -7,8 +7,10 @@ const chips = [
   { to: '/', label: '总览', tip: '今日票根' },
   { to: '/events', label: '券事件', tip: '发放·核销·作废' },
   { to: '/redeem', label: '核销钉扎', tip: '事实→批次' },
-  { to: '/batches', label: '钉扎批次', tip: '已钉集合' },
-  { to: '/settings', label: '设置', tip: '业务日' },
+  { to: '/returns', label: '退回补偿', tip: '原批只读·补偿批' },
+  { to: '/batches', label: '钉扎批次', tip: '原批/补偿批互证' },
+  { to: '/reconciliation', label: '互证报告', tip: '两条策略核对' },
+  { to: '/settings', label: '设置', tip: '业务日·退回策略' },
 ]
 function on(to) {
   if (to === '/') return route.path === '/'

@@ -50,21 +50,26 @@ onMounted(load)
       <button type="button" @click="submit">写入事件</button>
       <button type="button" class="ghost" @click="load">刷新</button>
     </div>
+    <p class="hint">退回不在此录入：请到「退回补偿」以原核销批为锚写入，保证事件与事实同源。</p>
     <p class="msg" v-if="msg">{{ msg }}</p>
     <p class="msg err" v-if="err">{{ err }}</p>
   </div>
   <div class="panel">
     <table>
-      <thead><tr><th>ID</th><th>类型</th><th>券码</th><th>活动</th><th>金额</th><th>业务日</th><th>时刻</th></tr></thead>
+      <thead><tr><th>ID</th><th>类型</th><th>券码</th><th>活动</th><th>金额</th><th>业务日</th><th>时刻</th><th>关联</th></tr></thead>
       <tbody>
         <tr v-for="r in rows" :key="r.id">
           <td>{{ r.id }}</td>
-          <td><span class="tag" :class="{ warn: r.event_type==='redeem' }">{{ r.event_type }}</span></td>
+          <td><span class="tag" :class="{ warn: r.event_type==='redeem', bad: r.event_type==='return' }">{{ r.event_type }}</span></td>
           <td>{{ r.coupon_code }}</td>
           <td>{{ r.campaign_code }}</td>
           <td>{{ r.amount }}</td>
           <td>{{ r.business_day }}</td>
           <td>{{ r.occurred_at }}</td>
+          <td>
+            <span v-if="r.compensates_fact_id" class="tag warn">原核销事实 #{{ r.compensates_fact_id }}</span>
+            <span v-else class="hint">—</span>
+          </td>
         </tr>
       </tbody>
     </table>

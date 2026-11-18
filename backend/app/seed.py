@@ -1,14 +1,23 @@
 from __future__ import annotations
+
 from datetime import date, datetime, timedelta
+
+from app import domain
 from app.db import connect, init_db
+from app.repositories import settings as settings_repo
 
 
 def seed_if_empty() -> None:
     init_db()
     conn = connect()
     try:
+        if settings_repo.get(conn, domain.RETURN_POLICY_KEY, "") == "":
+            settings_repo.set_(
+                conn, domain.RETURN_POLICY_KEY, domain.DEFAULT_RETURN_POLICY
+            )
         n = conn.execute("SELECT COUNT(*) c FROM campaigns").fetchone()["c"]
         if n:
+            conn.commit()
             return
         today = date.today().isoformat()
         conn.execute(
@@ -43,8 +52,8 @@ def seed_if_empty() -> None:
             )
             if et == "redeem":
                 conn.execute(
-                    "INSERT INTO redeem_facts(coupon_code, campaign_code, amount, business_day, event_id, status) VALUES(?,?,?,?,?, 'open')",
-                    (cc, camp, amt, day, cur.lastrowid),
+                    "INSERT INTO redeem_facts(coupon_code, campaign_code, amount, business_day, event_id, status, fact_kind) VALUES(?,?,?,?,?, 'open', ?)",
+                    (cc, camp, amt, day, cur.lastrowid, domain.FACT_KIND_REDEEM),
                 )
         conn.commit()
     finally:

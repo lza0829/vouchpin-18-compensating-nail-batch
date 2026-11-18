@@ -48,5 +48,6 @@ onMounted(load)
         </tr>
       </tbody>
     </table>
+    <p class="hint">钉扎后原批只读；退回不会再改写这里的任何数字，请到「退回补偿」处理。</p>
   </div>
 </template>

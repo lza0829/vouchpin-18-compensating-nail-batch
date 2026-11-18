@@ -1,6 +1,9 @@
 from __future__ import annotations
+
 from typing import Any
+
 from fastapi import APIRouter, Query
+
 from app.services import redeem_service as svc
 
 router = APIRouter(tags=["redeem"])
@@ -22,5 +25,13 @@ def seal(body: dict[str, Any]):
 
 
 @router.get("/batches")
-def batches():
-    return svc.list_batches()
+def batches(
+    business_day: str | None = Query(None),
+    batch_kind: str | None = Query(None),
+):
+    return svc.list_batches(business_day, batch_kind)
+
+
+@router.get("/batches/{batch_id}")
+def batch(batch_id: int):
+    return svc.batch_detail(batch_id)
